@@ -1,0 +1,17 @@
+name: Advance CI/CD workflow
+
+on:
+    push:
+        branches: ['main']
+
+    pull_request: 
+        branches: ['main']
+
+concurrency:
+    group: 'first'
+    cancel-in-progress: false
+
+jobs:
+    security_checks:
+        runs-on: ubuntu-latest
+        steps:
