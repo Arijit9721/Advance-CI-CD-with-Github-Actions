@@ -55,7 +55,7 @@ jobs:
               uses: actions/checkout@v4
 
             - name: Gitleaks installation
-              run: sudo apt install gitleaks -y
+              run: sudo apt-get install gitleaks -y
 
             - name: Checking for hardocded vunerabilities in the code
               run: gitleaks detect source . -r gitleaks-report.json -f json
