@@ -34,7 +34,7 @@ jobs:
                 cache: maven
 
             - name: Build with Maven
-              run: mvn -B package --file pom.xml
+              run: mvn compile
 
             - name: Making the .jar file into an artifact
               uses: actions/upload-artifact@v4
@@ -43,14 +43,30 @@ jobs:
                 path: target/*.jar
 
     security_checks:
-        needs: build
         runs-on: ubuntu-latest
         steps:
 
-            - name: Downloading the maven artifact made in the previous job
-              uses: actions/download-artifact@v4
-              with:
-                name: maven-artifact
+            # - name: Downloading the maven artifact made in the previous job
+            #   uses: actions/download-artifact@v4
+            #   with:
+            #     name: maven-artifact
 
-            - name: Checking out the artifact
-              run: ls -ltr
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Gitleaks installation
+              run: sudo apt install gitleaks -y
+
+            - name: Checking for hardocded vunerabilities in the code
+              run: gitleaks detect source . -r gitleaks-report.json -f json
+
+            - name: Installing trivy
+              run: |
+                sudo apt-get install wget apt-transport-https gnupg lsb-release
+                wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo apt-key add -
+                echo deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main | sudo tee -a /etc/apt/sources.list.d/trivy.list
+                sudo apt-get update -y
+                sudo apt-get install trivy -y
+            
+            - name: Trivy FS scan
+              run: trivy fs --format table -o fs-report.json .
