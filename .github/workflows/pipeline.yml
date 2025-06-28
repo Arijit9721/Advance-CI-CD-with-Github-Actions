@@ -92,7 +92,39 @@ jobs:
               uses: mr-smithers-excellent/docker-build-push@v6
               with:
                 image: arijit21/advance-github-actions-project
-                tags: v1
+                tags: latest,${{ github.sha}}
                 registry: docker.io
                 username: ${{ secrets.DOCKER_USERNAME }}
                 password: ${{ secrets.DOCKER_PASSWORD }}
+
+    deploy_to_eks:
+        needs: docker_build_and_publish
+        runs-on: ubuntu-latest
+        steps:
+
+          - name: Checkout code
+            uses: actions/checkout@v4
+
+
+          - name: Installing aws cli
+            run: |
+             sudo apt update
+             curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+             unzip awscliv2.zip
+             sudo ./aws/install
+
+          - name: Configuring aws credentials
+            uses: aws-actions/configure-aws-credentials@v4.1.0
+            with:
+              aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+              aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+              aws-region: ap-south-1
+
+          - name: Configuring Kubeconfig
+            run: |
+             mkdir -p $HOME/.kube
+             echo ${{ secrets.EKS_KUBECONFIG }} > $HOME/.kube/config
+
+          - name: Deploying the ds.yml file to EKS
+            run: kubectl apply -f ds.yml
+
