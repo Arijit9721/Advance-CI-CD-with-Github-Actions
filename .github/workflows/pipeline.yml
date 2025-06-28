@@ -91,7 +91,7 @@ jobs:
             - name: Building the docker image and pushing it to dockerhub 
               uses: mr-smithers-excellent/docker-build-push@v6
               with:
-                image: arijit21/java-app-with-github-actions/advance-project
+                image: arijit21/advance-github-actions-project
                 tags: v1
                 registry: docker.io
                 username: ${{ secrets.DOCKER_USERNAME }}
