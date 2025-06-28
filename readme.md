@@ -86,4 +86,4 @@ Set these in your repo’s **Settings > Secrets and variables > Actions**:
 
 `docker_build_and_publish` : Downloads `.jar` artifact, builds Docker image, and pushes to Docker Hub
 
-`deploy_to_eks` : Deploys the `ds.yml` file to the EKS cluster 
+`deploy_to_eks` : Deploys the `ds.yml` file to the EKS cluster  
