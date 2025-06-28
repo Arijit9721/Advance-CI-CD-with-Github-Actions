@@ -88,11 +88,11 @@ jobs:
             - name: Check for the artifact
               run: ls -lh 
 
-            # - name: Building the docker image and pushing it to dockerhub 
-            #   uses: mr-smithers-excellent/docker-build-push@v6
-            #   with:
-            #     image: arijit21/java-app-with-github-actions/advance-project
-            #     tags: v1
-            #     registry: docker.io
-            #     username: ${{ secrets.DOCKER_USERNAME }}
-            #     password: ${{ secrets.DOCKER_PASSWORD }}
+            - name: Building the docker image and pushing it to dockerhub 
+              uses: mr-smithers-excellent/docker-build-push@v6
+              with:
+                image: arijit21/java-app-with-github-actions/advance-project
+                tags: v1
+                registry: docker.io
+                username: ${{ secrets.DOCKER_USERNAME }}
+                password: ${{ secrets.DOCKER_PASSWORD }}
