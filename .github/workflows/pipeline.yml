@@ -60,11 +60,11 @@ jobs:
                 distribution: 'temurin'
                 cache: maven
 
-            - name: Build with Maven
-              run: mvn compile
-
             - name: Running maven tests
               run: mvn test
+
+            - name: Package the jar file without running tests
+              run: mvn package -DskipTests
 
             - name: Building the package into an artifact for future use
               uses: actions/upload-artifact@v4
